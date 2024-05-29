@@ -1,0 +1,127 @@
+﻿
+<style>
+    .form-label {
+        text-decoration: underline;
+    }
+</style>
+
+<div id="striped-rows" class="mb-4">
+    <div class="mb-10 card">
+        <div class="tab-content p-4" id="pills-tabContent-validation">
+            <div class="tab-pane tab-example-design fade show active" id="pills-validation-design" role="tabpanel" aria-labelledby="pills-validation-design-tab">
+                <form class="row g-3 needs-validation" novalidate="">
+                    <div class="col-md-3">
+                        <label for="validationCustom01" class="form-label">Is Emrı Numarası</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.IS_EMRI_NO</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustom02" class="form-label">
+                            Urun Adı
+                        </label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.URUN_ADI</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Urun Kodu</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.URUN_KODU</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Toplam Siparis Miktarı</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.Toplam_Siparis_Miktari</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustom03" class="form-label">Temel Olcu Birimi</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.Temel_Olcu_Birimi</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustom03" class="form-label">Seviye</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.COKLU_SEVIYE</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Tarih</label>
+                        <div class="input-group has-validation">
+                            <label>@ViewBag.SiparisBilgileri.TARIH</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Arka Panjur </label>
+                        <div class="input-group has-validation">
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Raf Adeti</label>
+                        <div class="input-group has-validation">
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="validationCustomUsername" class="form-label">Üründe Sticker Var Mı?</label>
+                        <div class="input-group has-validation">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="evet" id="stickerEvet">
+                                <label class="form-check-label" for="stickerEvet">
+                                    Evet
+                                </label>
+                            </div>
+                            <br />
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="hayır" id="stickerHayir">
+                                <label class="form-check-label" for="stickerHayir">
+                                    Hayır
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <button id="printButton" onclick="yazdir()">Yazdır</button> <!-- Yazdır düğmesi -->
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function yazdir() {
+        // Yazdır düğmesini al
+        var printButton = document.getElementById('printButton');
+        // Yazdır düğmesini sakla
+        printButton.style.display = 'none';
+
+        // İş Emri Bilgileri alanını al
+        var printContents = document.getElementById("pills-validation-design").innerHTML;
+        // Orijinal içeriği sakla
+        var originalContents = document.body.innerHTML;
+        // Sadece İş Emri Bilgileri alanını göster
+        document.body.innerHTML = printContents;
+        // Yazdır
+        window.print();
+        // Orijinal içeriği geri yükle
+        document.body.innerHTML = originalContents;
+
+        // Yazdır düğmesini geri göster
+        printButton.style.display = 'block';
+    }
+</script>
+
+

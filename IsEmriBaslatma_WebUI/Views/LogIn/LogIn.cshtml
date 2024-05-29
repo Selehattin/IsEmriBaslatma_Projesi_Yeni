@@ -1,0 +1,149 @@
+﻿@{ Layout = null;}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Codescandy">
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/AdminUI/assets/images/favicon/favicon.ico">
+    <!-- Libs CSS -->
+    <link href="/Content/AdminUI/assets/libs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/Content/AdminUI/assets/libs/%40mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/Content/AdminUI/assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="/Content/AdminUI/assets/css/theme.min.css">
+    <title>KLİMASAN HOŞ GELDİNİZ</title>
+</head>
+
+<body style="background-image: url(/Content/AdminUI/myImage/klimasan-kaliteyi-koruyoruz.jpg);background-size:cover;background-repeat: repeat-y">
+    <!-- container -->
+    <main class="container d-flex flex-column">
+        <div class="row align-items-center justify-content-center g-0
+        min-vh-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xxl-4 py-8 py-xl-0">
+                <a href="#" class="form-check form-switch theme-switch btn btn-light btn-icon rounded-circle d-none ">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+
+                </a>
+                <!-- Card -->
+                <div class="card smooth-shadow-md">
+                    <!-- Card body -->
+                    <div class="card-body p-6">
+                        <div class="mb-4">
+                            <a href="#">
+                                <img class="col-lg-12" src="~/Content/AdminUI/myImage/Logo-klimasan.png" />
+                                @*<h2 class="text-gray-600">KLİMASAN</h2>*@
+                            </a>
+                            <h3 class="mb-0 text-primary mt-5">Merhaba</h3>
+                            @*<p class="mb-0 text-gray-400">Hesap bilgilerini giriniz.</p>*@
+                        </div>
+                        <!-- Form -->
+                        <form action="/LogIn/LogIn" method="post">
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Sicil No</label>
+                                <input type="text" id="email" class="form-control" name="userName" placeholder="Sicil Numaranızı Yazınız..." required="">
+                            </div>
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Parola</label>
+                                <input type="password" id="password" class="form-control" name="password" placeholder="**************" required="">
+                                @if (ViewBag.LogInError != null)
+                                {
+
+                                    <label class="text-danger">@ViewBag.LogInError</label>
+                                }
+                            </div>
+                    
+
+
+
+                            @*<div class="mb-3" id="vardiyaDurumu">
+                                <label for="password" class="form-label">Vardiya</label>
+                                <select name="vardiya" class="form-select">
+                                    <option selected value="">Seçiniz</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                                @if (ViewBag.LogInError != null)
+                                {
+
+                                    <label class="text-danger">@ViewBag.LogInError</label>
+                                }
+                            </div>*@
+                            <!-- Checkbox -->
+                            <div class="d-lg-flex justify-content-between align-items-center
+                  mb-4">
+                                @*<div class="form-check custom-checkbox">
+                <input type="checkbox" class="form-check-input" id="rememberme">
+                <label class="form-check-label" for="rememberme">
+                    Parolamı Unuttum
+                </label>
+            </div>*@
+
+                            </div>
+                            <div>
+                                <!-- Button -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        Giriş yap
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Scripts -->
+    <!-- Libs JS -->
+    <script src="/Content/AdminUI/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/Content/AdminUI/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/Content/AdminUI/assets/libs/feather-icons/dist/feather.min.js"></script>
+    <script src="/Content/AdminUI/assets/libs/simplebar/dist/simplebar.min.js"></script>
+
+
+
+
+    <!-- Theme JS -->
+    <script src="/Content/AdminUI/assets/js/theme.min.js"></script>
+</body>
+</html>
+
+<!-- Scripts -->
+<script>
+    $(document).ready(function () {
+        // Sicil numarası alanı değiştiğinde tetiklenecek işlemler
+        $('#email').on('change', function () {
+            //alert("deneme");
+            // Sicil numarasını al
+            var sicilNo = $(this).val();
+            // AJAX isteği ile ROL_ID'yi kontrol et
+            $.ajax({
+                url: '/LogIN/CheckUserRole', // ROL_ID kontrolü için gerekli endpoint'in URL'si
+                type: 'POST',
+                data: { sicilNo: sicilNo }, // Sicil numarasını AJAX isteğiyle gönder
+                success: function (result) {
+                    // Eğer ROL_ID 2 ise vardıya alanını gizle
+                 
+                    if (result.rolId == 2) {
+                        $('#vardiyaDurumu').hide(); // Vardıya alanını gizle
+                    } else {
+                        $('#vardiyaDurumu').show(); // Vardıya alanını göster
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+

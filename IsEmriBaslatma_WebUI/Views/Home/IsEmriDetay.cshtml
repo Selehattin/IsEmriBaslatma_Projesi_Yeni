@@ -1,0 +1,23 @@
+﻿@using IsEmriBaslatma_DataAccesLayer.Model
+@model List<IS_EMRI_KALEMLERI>
+@{
+    ViewBag.Title = "Home Page";
+    int popUpID = 1;
+}
+<div class="col-xl-12 col-md-12 col-sm-12 col-12  ">
+    <div class=" ">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <!-- İş Emri Bilgileri -->
+                @*@Html.Partial("_isEmriBilgileri")*@
+                <!-- İş Emri Bilgileri -->
+                <!-- Tablo -->
+                @Html.Partial("_isEmirleriDetayTablo")
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal
+ Aciklama ve İs Detay POPUP -->
+@Html.Partial("_urunDetaylariPopup")
+

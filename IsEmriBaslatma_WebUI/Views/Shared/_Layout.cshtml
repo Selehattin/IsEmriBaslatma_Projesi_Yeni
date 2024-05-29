@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-layout="horizontal">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Codescandy">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/Content/AdminUI/assets/images/favicon/favicon.ico">
+
+    <link href="/Content/AdminUI/assets/libs/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/Content/AdminUI/assets/libs/%40mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="/Content/AdminUI/assets/libs/simplebar/dist/simplebar.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/Content/AdminUI/assets/css/theme.min.css">
+
+    @*<script src="/Content/AdminUI/assets/libs/jquery/dist/jquery.min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+
+    <script src="/Content/AdminUI/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/Content/AdminUI/assets/libs/feather-icons/dist/feather.min.js"></script>
+    <script src="/Content/AdminUI/assets/libs/simplebar/dist/simplebar.min.js"></script>
+    <script src="/Content/AdminUI/assets/js/theme.min.js"></script>
+
+
+    <title>@ViewBag.Title</title>
+</head>
+
+<body>
+    <main id="main-wrapper" class="main-wrapper">
+        @Html.Partial("_NavbarPartialView")
+        @Html.Partial("_HeaderPartialView")
+        <!-- page content -->
+        <div id="app-content">
+
+            <div class="app-content-area">
+                <div class="container-fluid">
+                    @**@
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <!-- Page header d-flex-->
+                            <div class="justify-content-between align-items-center mb-4">
+                                @RenderBody()
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            // Tarih veya vardiya seçimi değiştiğinde filtreleme yap
+            $('#tarihFilter, #vardiyaFilter').change(function () {
+                var tarih = $('#tarihFilter').val();
+                var vardiya = $('#vardiyaFilter').val();
+                alert(tarih);
+                $.ajax({
+                    url: '/Arge/FilterByVardiya', // Endpoint URL
+                    type: 'POST',
+                    data: { tarih: tarih, vardiya: vardiya }, // Gönderilecek veriler
+                    success: function (response) {
+                        // Başarılı istek durumunda yapılacak işlemler
+                        // Önceki tablo içeriğini sil
+                        $('#tableBody').empty();
+                        // Yeni içeriği ekle
+                        $('#tableBody').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        // Hata durumunda yapılacak işlemler
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+        $("#myInput").on("keyup", function () {
+            alert("SDFSDF")
+        });
+    </script>
+
+    <script>
+        var selectedDateElement = document.getElementById("tarihFilter");
+
+        selectedDateElement.addEventListener("change", function () {
+            var selectedDate = this.value;
+            alert("Seçilen tarih: ", selectedDate);
+            // Burada seçilen tarih değerini kullanabilirsiniz
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".myInput").on("input", function () {
+                var value = $(this).val().toLowerCase();
+                //alert(value);
+                $.ajax({
+                    url: '/Uretim/_MalzemeFilter', // Buradaki adres ve controller adı doğru olmalı
+                    type: 'POST',
+                    data: { searchValue: value },
+                    success: function (result) {
+                        $('.myList').html(result);
+                    },
+                    error: function (xhr) {
+                        alert('Error: ' + xhr.statusText);
+                    }
+                });
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

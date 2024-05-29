@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="KLMSN_IS_BASLATMAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="IS_EMIRLERI">
+          <Key>
+            <PropertyRef Name="IS_EMRI_ID" />
+          </Key>
+          <Property Name="IS_EMRI_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OLUSTURAN_ID" Type="int" />
+          <Property Name="IS_EMRI_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="URUN_ADI" Type="varchar" MaxLength="150" />
+          <Property Name="URUN_KODU" Type="varchar" MaxLength="50" />
+          <Property Name="Toplam_Siparis_Miktari" Type="varchar" MaxLength="50" />
+          <Property Name="Temel_Olcu_Birimi" Type="varchar" MaxLength="50" />
+          <Property Name="TARIH" Type="varchar" MaxLength="50" />
+          <Property Name="IMAGE" Type="varchar" MaxLength="100" />
+          <Property Name="TEKLI_SEVIYE" Type="varchar" MaxLength="1" />
+          <Property Name="COKLU_SEVIYE" Type="varchar" MaxLength="1" />
+          <Property Name="STATU" Type="varchar" MaxLength="50" />
+          <Property Name="ACIKLAMA" Type="varchar" MaxLength="500" />
+          <Property Name="IS_EMRI_BITIS_TARIHI" Type="date" />
+        </EntityType>
+        <EntityType Name="IS_EMRI_KALEMLERI">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="is_EMRI_ID" Type="int" />
+          <Property Name="IS_EMRI_NO" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="KAYNAK" Type="varchar" MaxLength="50" />
+          <Property Name="STOK_KODU" Type="varchar" MaxLength="50" />
+          <Property Name="STOK_ISMI" Type="varchar" MaxLength="50" />
+          <Property Name="MAL_GRUBU" Type="varchar" MaxLength="50" />
+          <Property Name="OLCU_BIRIMI" Type="varchar" MaxLength="50" />
+          <Property Name="MIKTAR" Type="varchar" MaxLength="50" />
+          <Property Name="URUN_BASINA_MIKTAR" Type="varchar" MaxLength="50" />
+          <Property Name="BOLD" Type="varchar" MaxLength="50" />
+          <Property Name="KULLANILAN_MIKTAR" Type="varchar" MaxLength="50" />
+          <Property Name="ALTERNATIF_URUN" Type="varchar" MaxLength="50" />
+          <Property Name="SAPMA_NEDENI" Type="varchar" MaxLength="50" />
+          <Property Name="SAPMA_DURUM" Type="bit" />
+          <Property Name="STATU" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="KULLANICILAR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SICIL_NO" Type="varchar" MaxLength="50" />
+          <Property Name="SIFRE" Type="varchar" MaxLength="50" />
+          <Property Name="ROL_ID" Type="int" />
+          <Property Name="DURUM" Type="bit" />
+          <Property Name="KULLANICI_LOG" Type="bit" />
+        </EntityType>
+        <EntityType Name="SAPMA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IS_EMRI_KALEM_ID" Type="int" Nullable="false" />
+          <Property Name="GERCEKLESEN_MIKTAR" Type="varchar" MaxLength="50" />
+          <Property Name="ALTERNATIF_URUN" Type="varchar" MaxLength="50" />
+          <Property Name="ADET" Type="varchar" MaxLength="50" />
+          <Property Name="SAPMA_NEDENI" Type="varchar" MaxLength="50" />
+          <Property Name="TARIH" Type="datetime" />
+          <Property Name="SAPMA_ONAY_DURUM" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_IS_EMIRLERI_KULLANICILAR">
+          <End Role="KULLANICILAR" Type="Self.KULLANICILAR" Multiplicity="0..1" />
+          <End Role="IS_EMIRLERI" Type="Self.IS_EMIRLERI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KULLANICILAR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IS_EMIRLERI">
+              <PropertyRef Name="OLUSTURAN_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1">
+          <End Role="IS_EMIRLERI" Type="Self.IS_EMIRLERI" Multiplicity="0..1" />
+          <End Role="IS_EMRI_KALEMLERI" Type="Self.IS_EMRI_KALEMLERI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IS_EMIRLERI">
+              <PropertyRef Name="IS_EMRI_ID" />
+            </Principal>
+            <Dependent Role="IS_EMRI_KALEMLERI">
+              <PropertyRef Name="is_EMRI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SAPMA_IS_EMRI_KALEMLERI">
+          <End Role="IS_EMRI_KALEMLERI" Type="Self.IS_EMRI_KALEMLERI" Multiplicity="1" />
+          <End Role="SAPMA" Type="Self.SAPMA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IS_EMRI_KALEMLERI">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SAPMA">
+              <PropertyRef Name="IS_EMRI_KALEM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KLMSN_IS_BASLATMAModelStoreContainer">
+          <EntitySet Name="IS_EMIRLERI" EntityType="Self.IS_EMIRLERI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IS_EMRI_KALEMLERI" EntityType="Self.IS_EMRI_KALEMLERI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KULLANICILAR" EntityType="Self.KULLANICILAR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SAPMA" EntityType="Self.SAPMA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IS_EMIRLERI_KULLANICILAR" Association="Self.FK_IS_EMIRLERI_KULLANICILAR">
+            <End Role="KULLANICILAR" EntitySet="KULLANICILAR" />
+            <End Role="IS_EMIRLERI" EntitySet="IS_EMIRLERI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1" Association="Self.FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1">
+            <End Role="IS_EMIRLERI" EntitySet="IS_EMIRLERI" />
+            <End Role="IS_EMRI_KALEMLERI" EntitySet="IS_EMRI_KALEMLERI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SAPMA_IS_EMRI_KALEMLERI" Association="Self.FK_SAPMA_IS_EMRI_KALEMLERI">
+            <End Role="IS_EMRI_KALEMLERI" EntitySet="IS_EMRI_KALEMLERI" />
+            <End Role="SAPMA" EntitySet="SAPMA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KLMSN_IS_BASLATMAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IsEmriDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="IS_EMIRLERI" EntityType="KLMSN_IS_BASLATMAModel.IS_EMIRLERI" />
+          <EntitySet Name="IS_EMRI_KALEMLERI" EntityType="KLMSN_IS_BASLATMAModel.IS_EMRI_KALEMLERI" />
+          <EntitySet Name="KULLANICILAR" EntityType="KLMSN_IS_BASLATMAModel.KULLANICILAR" />
+          <EntitySet Name="SAPMA" EntityType="KLMSN_IS_BASLATMAModel.SAPMA" />
+          <EntitySet Name="sysdiagrams" EntityType="KLMSN_IS_BASLATMAModel.sysdiagrams" />
+          <AssociationSet Name="FK_IS_EMIRLERI_KULLANICILAR" Association="KLMSN_IS_BASLATMAModel.FK_IS_EMIRLERI_KULLANICILAR">
+            <End Role="KULLANICILAR" EntitySet="KULLANICILAR" />
+            <End Role="IS_EMIRLERI" EntitySet="IS_EMIRLERI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1" Association="KLMSN_IS_BASLATMAModel.FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1">
+            <End Role="IS_EMIRLERI" EntitySet="IS_EMIRLERI" />
+            <End Role="IS_EMRI_KALEMLERI" EntitySet="IS_EMRI_KALEMLERI" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SAPMA_IS_EMRI_KALEMLERI" Association="KLMSN_IS_BASLATMAModel.FK_SAPMA_IS_EMRI_KALEMLERI">
+            <End Role="IS_EMRI_KALEMLERI" EntitySet="IS_EMRI_KALEMLERI" />
+            <End Role="SAPMA" EntitySet="SAPMA" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="IS_EMIRLERI">
+          <Key>
+            <PropertyRef Name="IS_EMRI_ID" />
+          </Key>
+          <Property Name="IS_EMRI_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OLUSTURAN_ID" Type="Int32" />
+          <Property Name="IS_EMRI_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="URUN_ADI" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="URUN_KODU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Toplam_Siparis_Miktari" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Temel_Olcu_Birimi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TARIH" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IMAGE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TEKLI_SEVIYE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="COKLU_SEVIYE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="STATU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ACIKLAMA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IS_EMRI_BITIS_TARIHI" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="KULLANICILAR" Relationship="KLMSN_IS_BASLATMAModel.FK_IS_EMIRLERI_KULLANICILAR" FromRole="IS_EMIRLERI" ToRole="KULLANICILAR" />
+          <NavigationProperty Name="IS_EMRI_KALEMLERI" Relationship="KLMSN_IS_BASLATMAModel.FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1" FromRole="IS_EMIRLERI" ToRole="IS_EMRI_KALEMLERI" />
+        </EntityType>
+        <EntityType Name="IS_EMRI_KALEMLERI">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="is_EMRI_ID" Type="Int32" />
+          <Property Name="IS_EMRI_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KAYNAK" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STOK_KODU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="STOK_ISMI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MAL_GRUBU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OLCU_BIRIMI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MIKTAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="URUN_BASINA_MIKTAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BOLD" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KULLANILAN_MIKTAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ALTERNATIF_URUN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SAPMA_NEDENI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SAPMA_DURUM" Type="Boolean" />
+          <Property Name="STATU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IS_EMIRLERI" Relationship="KLMSN_IS_BASLATMAModel.FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1" FromRole="IS_EMRI_KALEMLERI" ToRole="IS_EMIRLERI" />
+          <NavigationProperty Name="SAPMA" Relationship="KLMSN_IS_BASLATMAModel.FK_SAPMA_IS_EMRI_KALEMLERI" FromRole="IS_EMRI_KALEMLERI" ToRole="SAPMA" />
+        </EntityType>
+        <EntityType Name="KULLANICILAR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SICIL_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SIFRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ROL_ID" Type="Int32" />
+          <Property Name="DURUM" Type="Boolean" />
+          <NavigationProperty Name="IS_EMIRLERI" Relationship="KLMSN_IS_BASLATMAModel.FK_IS_EMIRLERI_KULLANICILAR" FromRole="KULLANICILAR" ToRole="IS_EMIRLERI" />
+          <Property Name="KULLANICI_LOG" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SAPMA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IS_EMRI_KALEM_ID" Type="Int32" Nullable="false" />
+          <Property Name="GERCEKLESEN_MIKTAR" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ALTERNATIF_URUN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ADET" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SAPMA_NEDENI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TARIH" Type="DateTime" Precision="3" />
+          <Property Name="SAPMA_ONAY_DURUM" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IS_EMRI_KALEMLERI" Relationship="KLMSN_IS_BASLATMAModel.FK_SAPMA_IS_EMRI_KALEMLERI" FromRole="SAPMA" ToRole="IS_EMRI_KALEMLERI" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_IS_EMIRLERI_KULLANICILAR">
+          <End Type="KLMSN_IS_BASLATMAModel.KULLANICILAR" Role="KULLANICILAR" Multiplicity="0..1" />
+          <End Type="KLMSN_IS_BASLATMAModel.IS_EMIRLERI" Role="IS_EMIRLERI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KULLANICILAR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IS_EMIRLERI">
+              <PropertyRef Name="OLUSTURAN_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IS_EMRI_KALEMLERI_IS_EMIRLERI1">
+          <End Type="KLMSN_IS_BASLATMAModel.IS_EMIRLERI" Role="IS_EMIRLERI" Multiplicity="0..1" />
+          <End Type="KLMSN_IS_BASLATMAModel.IS_EMRI_KALEMLERI" Role="IS_EMRI_KALEMLERI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IS_EMIRLERI">
+              <PropertyRef Name="IS_EMRI_ID" />
+            </Principal>
+            <Dependent Role="IS_EMRI_KALEMLERI">
+              <PropertyRef Name="is_EMRI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SAPMA_IS_EMRI_KALEMLERI">
+          <End Type="KLMSN_IS_BASLATMAModel.IS_EMRI_KALEMLERI" Role="IS_EMRI_KALEMLERI" Multiplicity="1" />
+          <End Type="KLMSN_IS_BASLATMAModel.SAPMA" Role="SAPMA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IS_EMRI_KALEMLERI">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SAPMA">
+              <PropertyRef Name="IS_EMRI_KALEM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KLMSN_IS_BASLATMAModelStoreContainer" CdmEntityContainer="IsEmriDbEntities">
+          <EntitySetMapping Name="IS_EMIRLERI">
+            <EntityTypeMapping TypeName="KLMSN_IS_BASLATMAModel.IS_EMIRLERI">
+              <MappingFragment StoreEntitySet="IS_EMIRLERI">
+                <ScalarProperty Name="IS_EMRI_BITIS_TARIHI" ColumnName="IS_EMRI_BITIS_TARIHI" />
+                <ScalarProperty Name="ACIKLAMA" ColumnName="ACIKLAMA" />
+                <ScalarProperty Name="STATU" ColumnName="STATU" />
+                <ScalarProperty Name="COKLU_SEVIYE" ColumnName="COKLU_SEVIYE" />
+                <ScalarProperty Name="TEKLI_SEVIYE" ColumnName="TEKLI_SEVIYE" />
+                <ScalarProperty Name="IMAGE" ColumnName="IMAGE" />
+                <ScalarProperty Name="TARIH" ColumnName="TARIH" />
+                <ScalarProperty Name="Temel_Olcu_Birimi" ColumnName="Temel_Olcu_Birimi" />
+                <ScalarProperty Name="Toplam_Siparis_Miktari" ColumnName="Toplam_Siparis_Miktari" />
+                <ScalarProperty Name="URUN_KODU" ColumnName="URUN_KODU" />
+                <ScalarProperty Name="URUN_ADI" ColumnName="URUN_ADI" />
+                <ScalarProperty Name="IS_EMRI_NO" ColumnName="IS_EMRI_NO" />
+                <ScalarProperty Name="OLUSTURAN_ID" ColumnName="OLUSTURAN_ID" />
+                <ScalarProperty Name="IS_EMRI_ID" ColumnName="IS_EMRI_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IS_EMRI_KALEMLERI">
+            <EntityTypeMapping TypeName="KLMSN_IS_BASLATMAModel.IS_EMRI_KALEMLERI">
+              <MappingFragment StoreEntitySet="IS_EMRI_KALEMLERI">
+                <ScalarProperty Name="STATU" ColumnName="STATU" />
+                <ScalarProperty Name="SAPMA_DURUM" ColumnName="SAPMA_DURUM" />
+                <ScalarProperty Name="SAPMA_NEDENI" ColumnName="SAPMA_NEDENI" />
+                <ScalarProperty Name="ALTERNATIF_URUN" ColumnName="ALTERNATIF_URUN" />
+                <ScalarProperty Name="KULLANILAN_MIKTAR" ColumnName="KULLANILAN_MIKTAR" />
+                <ScalarProperty Name="BOLD" ColumnName="BOLD" />
+                <ScalarProperty Name="URUN_BASINA_MIKTAR" ColumnName="URUN_BASINA_MIKTAR" />
+                <ScalarProperty Name="MIKTAR" ColumnName="MIKTAR" />
+                <ScalarProperty Name="OLCU_BIRIMI" ColumnName="OLCU_BIRIMI" />
+                <ScalarProperty Name="MAL_GRUBU" ColumnName="MAL_GRUBU" />
+                <ScalarProperty Name="STOK_ISMI" ColumnName="STOK_ISMI" />
+                <ScalarProperty Name="STOK_KODU" ColumnName="STOK_KODU" />
+                <ScalarProperty Name="KAYNAK" ColumnName="KAYNAK" />
+                <ScalarProperty Name="IS_EMRI_NO" ColumnName="IS_EMRI_NO" />
+                <ScalarProperty Name="is_EMRI_ID" ColumnName="is_EMRI_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KULLANICILAR">
+            <EntityTypeMapping TypeName="KLMSN_IS_BASLATMAModel.KULLANICILAR">
+              <MappingFragment StoreEntitySet="KULLANICILAR">
+                <ScalarProperty Name="KULLANICI_LOG" ColumnName="KULLANICI_LOG" />
+                <ScalarProperty Name="DURUM" ColumnName="DURUM" />
+                <ScalarProperty Name="ROL_ID" ColumnName="ROL_ID" />
+                <ScalarProperty Name="SIFRE" ColumnName="SIFRE" />
+                <ScalarProperty Name="SICIL_NO" ColumnName="SICIL_NO" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SAPMA">
+            <EntityTypeMapping TypeName="KLMSN_IS_BASLATMAModel.SAPMA">
+              <MappingFragment StoreEntitySet="SAPMA">
+                <ScalarProperty Name="SAPMA_ONAY_DURUM" ColumnName="SAPMA_ONAY_DURUM" />
+                <ScalarProperty Name="TARIH" ColumnName="TARIH" />
+                <ScalarProperty Name="SAPMA_NEDENI" ColumnName="SAPMA_NEDENI" />
+                <ScalarProperty Name="ADET" ColumnName="ADET" />
+                <ScalarProperty Name="ALTERNATIF_URUN" ColumnName="ALTERNATIF_URUN" />
+                <ScalarProperty Name="GERCEKLESEN_MIKTAR" ColumnName="GERCEKLESEN_MIKTAR" />
+                <ScalarProperty Name="IS_EMRI_KALEM_ID" ColumnName="IS_EMRI_KALEM_ID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="KLMSN_IS_BASLATMAModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

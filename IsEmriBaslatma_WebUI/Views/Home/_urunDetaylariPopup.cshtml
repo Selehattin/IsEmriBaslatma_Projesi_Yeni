@@ -1,0 +1,409 @@
+﻿@using IsEmriBaslatma_DataAccesLayer;
+@using IsEmriBaslatma_WebUI.ModelView;
+@using IsEmriBaslatma_WebUI.Helpers;
+@{
+
+    IsEmriBaslatma_WebUI.WebUI.Helpers.Sifreleme sifreleme = new IsEmriBaslatma_WebUI.WebUI.Helpers.Sifreleme();
+}
+
+<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault(); // Formun normal gönderimini engelle
+
+            debugger;
+            var form = $(this); // Form elementini seç
+            //console.log('Form submitted:', form); // Formun seçilip seçilmediğini kontrol etmek için konsola yazdır
+            //var adetValue = form.find('input[name="isKalemInputMikar"]').val();
+            //if (!(/^\d+$/.test(adetValue))) {
+            //    alert("Adet alanına yalnızca rakam girilmelidir.");
+            //    return false; // Form gönderimini engelle
+            //}
+
+            // AJAX isteği yap
+            $.ajax({
+                url: form.attr('action'), // Formun action özelliğine göre isteği yap
+                method: form.attr('method'), // Formun method özelliğine göre isteği yap
+                data: form.serialize(), // Form verilerini al
+                success: function (data) {
+                    // Başarılı bir yanıt aldığında
+                    //alert("sadasd");
+                    form.closest('.modal').modal('hide'); // Modal pencereyi kapat
+                    form.closest('.modall').modal('hide'); // Modal pencereyi kapat
+                    form.closest('tr').css('background-color', 'red'); // Satır rengini kırmızıya dönüştür
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Hata durumunda konsola hata mesajını yazdır
+                    console.error('AJAX request failed:', error);
+                }
+            });
+        });
+
+    });
+
+
+</script>
+
+
+
+
+
+<!--<!-- #region POPUP URUN ALTERBATİFLERİ -->
+
+@foreach (IsEmriBaslatma_DataAccesLayer.Model.IS_EMRI_KALEMLERI item in Model)
+{
+    <div class="modal fade" id="selo+@item.ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Ürün Detayları</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="needs-validation" method="post" action="/Home/urunDetayPopUp" onsubmit="return formuDogrula()">
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Is Emri No</label>
+                                <input type="text" class="form-control" value="@item.IS_EMRI_NO" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Stok Kodu</label>
+                                <input type="text" class="form-control" value="@item.STOK_KODU" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Stok İsmi</label>
+                                <input type="text" class="form-control" value="@item.STOK_ISMI" readonly>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+
+                                <input class="form-control myInput" name="myInput" type="text" placeholder="Search..">
+                                <br>
+                                <ul class="list-group myList" id="myList">
+                                </ul>
+
+                                <select class="form-select select" data-control="select2" data-placeholder="Select an option" name="urunAdi">
+                                    @{
+                                        string selectedNumber = ""; // Initialize a variable to store the selected number
+                                        if (!string.IsNullOrEmpty(Request.QueryString["selectedNumber"])) // Check if a number is provided
+                                        {
+                                            selectedNumber = Request.QueryString["selectedNumber"]; // Assign the provided number to the variable
+                                        }
+
+                                        if (item.SAPMA_DURUM == true)
+                                        {
+                                            if (item.SAPMA.Count() > 0)
+                                            {
+                                                <option selected>@item.SAPMA.FirstOrDefault().ALTERNATIF_URUN</option>
+                                                foreach (Malzeme_Listesi malzeme in ViewBag.MalzemeListesi)
+                                                {
+                                                    if (@item.SAPMA.FirstOrDefault().ALTERNATIF_URUN != malzeme.Malzeme_Metni)
+                                                    {
+                                                        <option @(selectedNumber == malzeme.Malzeme_No.TrimStart(new Char[] { '0' }) ? "selected" : "")>@(malzeme.Malzeme_No.TrimStart(new Char[] { '0' }).TrimStart(new Char[] { '0' }) + " - " + malzeme.Malzeme_Metni)</option>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option @*selected value="1"*@> </option>
+                                            foreach (Malzeme_Listesi malzeme in ViewBag.MalzemeListesi)
+                                            {
+                                                <option @(selectedNumber == malzeme.Malzeme_No.TrimStart(new Char[] { '0' }) ? "selected" : "")>@(malzeme.Malzeme_No.TrimStart(new Char[] { '0' }) + " - " + malzeme.Malzeme_Metni)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+
+
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Adet</label>
+                                @{
+                                    if (item.SAPMA_DURUM == true)
+                                    {
+                                        if (item.SAPMA.Count() > 0)
+                                        {
+                                            <input type="text" class="form-control" name="isKalemInputMikar" value="@item.SAPMA.LastOrDefault().GERCEKLESEN_MIKTAR">
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        <input type="text" class="form-control" name="isKalemInputMikar" value="1">
+                                    }
+                                }
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Sapma Nedeni</label>
+                                @{ if (item.SAPMA_DURUM == true)
+                                    {
+                                        if (item.SAPMA.Count() > 0)
+                                        {
+                                            foreach (Malzeme_Listesi malzeme in ViewBag.MalzemeListesi)
+                                            {
+                                                if (item.SAPMA.FirstOrDefault().SAPMA_NEDENI == "Is Emri Hatasi")
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası" checked>
+                                                        <label class="form-check-label" for="sapma1">
+                                                            İş Emri Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası">
+                                                        <label class="form-check-label" for="sapma2">
+                                                            Ürün Ağacı Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı">
+                                                        <label class="form-check-label" for="sapma3">
+                                                            Alternatif Ürün Kullanıldı
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay">
+                                                        <label class="form-check-label" for="sapma4">
+                                                            Sapma Tipi-Onay
+                                                        </label>
+                                                    </div>
+                                                    break;
+                                                }
+                                                else if (item.SAPMA.FirstOrDefault().SAPMA_NEDENI == "Urun Agaci Hatasi")
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası">
+                                                        <label class="form-check-label" for="sapma1">
+                                                            İş Emri Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası" checked>
+                                                        <label class="form-check-label" for="sapma2">
+                                                            Ürün Ağacı Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı">
+                                                        <label class="form-check-label" for="sapma3">
+                                                            Alternatif Ürün Kullanıldı
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay">
+                                                        <label class="form-check-label" for="sapma4">
+                                                            Sapma Tipi-Onay
+                                                        </label>
+                                                    </div>
+                                                    break;
+
+                                                }
+                                                else if (item.SAPMA.FirstOrDefault().SAPMA_NEDENI == "Alternatif Ürün Kullanildi")
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası">
+                                                        <label class="form-check-label" for="sapma1">
+                                                            İş Emri Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası">
+                                                        <label class="form-check-label" for="sapma2">
+                                                            Ürün Ağacı Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı" checked>
+                                                        <label class="form-check-label" for="sapma3">
+                                                            Alternatif Ürün Kullanıldı
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay">
+                                                        <label class="form-check-label" for="sapma4">
+                                                            Sapma Tipi-Onay
+                                                        </label>
+                                                    </div>
+                                                    break;
+                                                }
+                                                else if (item.SAPMA.FirstOrDefault().SAPMA_NEDENI == "SapmaTipiOnay")
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası">
+                                                        <label class="form-check-label" for="sapma1">
+                                                            İş Emri Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası">
+                                                        <label class="form-check-label" for="sapma2">
+                                                            Ürün Ağacı Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı">
+                                                        <label class="form-check-label" for="sapma3">
+                                                            Alternatif Ürün Kullanıldı
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay" checked>
+                                                        <label class="form-check-label" for="sapma4">
+                                                            Sapma Tipi-Onay
+                                                        </label>
+                                                    </div>
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası">
+                                                        <label class="form-check-label" for="sapma1">
+                                                            İş Emri Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası">
+                                                        <label class="form-check-label" for="sapma2">
+                                                            Ürün Ağacı Hatası
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı">
+                                                        <label class="form-check-label" for="sapma3">
+                                                            Alternatif Ürün Kullanıldı
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay">
+                                                        <label class="form-check-label" for="sapma4">
+                                                            Sapma Tipi-Onay
+                                                        </label>
+                                                    </div>
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="İş Emri Hatası">
+                                            <label class="form-check-label" for="sapma1">
+                                                İş Emri Hatası
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="Urun Agacı Hatası">
+                                            <label class="form-check-label" for="sapma2">
+                                                Ürün Ağacı Hatası
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="Alternatif Ürün Kullanıldı">
+                                            <label class="form-check-label" for="sapma3">
+                                                Alternatif Ürün Kullanıldı
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SapmaTipiOnay">
+                                            <label class="form-check-label" for="sapma4">
+                                                Sapma Tipi-Onay
+                                            </label>
+                                        </div>
+
+
+                                    } }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        @*button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>*@
+                        <input type="hidden" name="isEmriKalemleriID" value="@item.ID" />
+                        <input type="submit" class="btn btn-primary" value="Değişikleri Kaydet" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+}
+<!-- #endregion -->
+<!-- #region POPUP YENI URUN KAYDETME -->
+<form class="needs-validation" method="post" action="/Home/YeniIsEmriKalemiEkleme" onsubmit="return formuDogrula()">
+    <div class="modal fade" id="yeniAlternatifUrun" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Ürün Detayları</h5>
+                    <button type="button" class="close" data-bs-dismiss="modall" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Is Emri No</label>
+                            <input type="text" class="form-control" value="" name="IS_EMRI_NO">
+                            <input name="is_EMRI_ID" value="@ViewBag.YeniIs_EMRI_KALEMI" type="hidden" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stok Kodu</label>
+                            <input type="text" class="form-control" value="" name="STOK_KODU">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Stok İsmi</label>
+                            <input type="text" class="form-control" value="" name="STOK_ISMI">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Alternatif Ürün</label>
+                            <input type="text" class="form-control" value="" name="urunAdi">
+
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Adet</label>
+                            @{
+
+                                <input type="text" class="form-control" name="isKalemInputMikar" value="">
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="hidden" name="isEmriKalemleriID" value="" />
+                    <input type="submit" class="btn btn-primary" value="Değişikleri Kaydet" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- #endregion -->

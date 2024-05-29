@@ -1,0 +1,66 @@
+﻿@using IsEmriBaslatma_WebUI.Models
+@model List<HatBilgisiModelView>
+@{
+    ViewBag.Title = "İş Emirleri";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">İş Emri Görüntüleme Formu </h5>
+                </div>
+                <div class="card-body">
+                    <form action="/Uretim/IsEmriGoruntulemeKalemleri" method="post">
+                        <div class="mb-3 row">
+                            <label for="isEmriNumber" class="col-sm-3 col-form-label">İş Emri No</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="isEmriNumber" name="isEmriNumber" placeholder="12345678" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="istasyonTipi" class="col-sm-3 col-form-label">Gruplama</label>
+                            <div class="col-sm-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Tekli_Coklu" id="tekSeviye" value="true">
+                                    <label class="form-check-label" for="tekSeviye">Tek Seviye</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Tekli_Coklu" id="cokSeviye" value="false">
+                                    <label class="form-check-label" for="cokSeviye">Çok Seviyeli</label>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="mb-3 row">
+                                <label for="hatBilgisiText" class="col-sm-3 col-form-label">Vardiya Bilgisi </label>
+                                <div class="col-sm-9">
+                                    <select class="form-select" id="hatBilgisiText" name="vardiyaBilgisi">
+                                        <option selected value="">Seçiniz</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                            </div>*@
+
+
+                        <div class="row">
+                            <div class="col-sm-9 offset-sm-3 text-center">
+                                <input class="btn btn-success col-12 mb-1 " value="Başlat" type="submit" />
+                                @if (@ViewBag.IsEmriBulunamadi != null)
+                                {
+                                    <h4 class="text-danger">@ViewBag.IsEmriBulunamadi</h4>
+                                }
+                                @if (@ViewBag.UserHata != null)
+                                {
+                                    <h4 class="text-danger">@ViewBag.UserHata</h4>
+                                }
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

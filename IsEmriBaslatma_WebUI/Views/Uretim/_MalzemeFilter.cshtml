@@ -1,0 +1,17 @@
+﻿@{
+    Layout = null;
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">@item.Malzeme_Metni</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No data available.</p>
+}

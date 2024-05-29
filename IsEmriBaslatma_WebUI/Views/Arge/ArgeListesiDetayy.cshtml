@@ -1,0 +1,101 @@
+﻿@model IEnumerable<IsEmriBaslatma_DataAccesLayer.Model.SAPMA>
+
+@{
+    ViewBag.Title = "ArgeListesiDetayy";
+}
+
+<h2>ArgeListesiDetayy</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table text-nowrap mb-0 table-centered">
+    <thead class="table-light">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IS_EMRI_KALEMLERI.IS_EMRI_NO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IS_EMRI_KALEMLERI.STOK_ISMI)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IS_EMRI_KALEMLERI.STOK_KODU)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ALTERNATIF_URUN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IS_EMRI_KALEMLERI.URUN_BASINA_MIKTAR)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GERCEKLESEN_MIKTAR)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ACIKLAMA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VARDIYA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SAPMA_NEDENI)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TARIH)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.KULLANICILAR.SICIL_NO)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IS_EMRI_KALEMLERI.IS_EMRI_NO)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IS_EMRI_KALEMLERI.STOK_ISMI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IS_EMRI_KALEMLERI.STOK_KODU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ALTERNATIF_URUN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IS_EMRI_KALEMLERI.URUN_BASINA_MIKTAR)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.GERCEKLESEN_MIKTAR)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ACIKLAMA)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VARDIYA)
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.SAPMA_NEDENI)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TARIH)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.KULLANICILAR.SICIL_NO)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

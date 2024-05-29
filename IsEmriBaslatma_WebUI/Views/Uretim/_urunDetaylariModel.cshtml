@@ -1,0 +1,173 @@
+﻿@{
+    Layout = null;
+}
+@model IS_EMRI_KALEMLERI
+
+<div class="modal-body">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Is Emri No</label>
+            <input type="text" class="form-control" value="@Model.IS_EMRI_NO" readonly>
+            <input type="hidden" value="@Model.ID" name="is_emri_id" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Stok Kodu</label>
+            <input type="text" class="form-control" value="@Model.STOK_KODU" readonly>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label class="form-label">Stok İsmi</label>
+            <input type="text" class="form-control" value="@Model.STOK_ISMI" readonly>
+        </div>
+    </div>
+    <div class="row mb-3">
+        @*<div class="col-md-12">
+                <input class="form-control myInput" name="myInput" type="text" placeholder="Search..">
+                <ul class="list-group myList" id="myList">
+                </ul>
+            </div>*@
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            @*<label class="form-label">Is Emri No</label>*@
+            <input type="hidden" class="form-control" value="" name="IS_EMRI_NO">
+            <input name="is_EMRI_ID" value="@ViewBag.YeniIs_EMRI_KALEMI" type="hidden" />
+        </div>
+        @*<div class="col-md-6">
+                <label class="form-label">Stok Kodu</label>
+                <input type="text" class="form-control" value="" name="STOK_KODU">
+            </div>*@
+    </div>
+    <div class="row mb-3">
+        @*<div class="col-md-12">
+                <label class="form-label">Stok İsmi</label>
+                <input type="text" class="form-control" value="" name="STOK_ISMI">
+            </div>*@
+    </div>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label class="form-label">Alternatif Ürün</label>
+            <input type="text" class="form-control" value="@Html.DisplayFor(m => m.ALTERNATIF_URUN)" name="urunAdi">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Adet</label>
+            <input type="text" class="form-control" name="isKalemInputMikar" value="@Html.DisplayFor(m => m.KULLANILAN_MIKTAR)">
+        </div>
+        <div class="col-md-6">
+            @{
+                string sapmaNedeni = Html.DisplayFor(m => m.SAPMA_NEDENI).ToString(); // Veritabanından gelen değer
+
+                // Formdaki radio butonlarının hangisinin seçili olacağını belirleme
+                string checkedValue = "";
+                switch (sapmaNedeni)
+                {
+                    case "sapma1":
+                        checkedValue = "IS_EMRI_HATASI";
+                        break;
+                    case "sapma2":
+                        checkedValue = "URUN_AGACI_HATASI";
+                        break;
+                    case "sapma3":
+                        checkedValue = "ALTERNATIF_URUN_KULLANILDI";
+                        break;
+                    case "sapma4":
+                        checkedValue = "SAPMA_TIPI_ONAY";
+                        break;
+                    default:
+                        checkedValue = "SAPMA_TIPI_ONAY"; // Varsayılan olarak seçili olanı belirle
+                        break;
+                }
+            }
+            <label class="form-label">Sapma Nedeni</label>
+             
+            <div class="form-check">
+                <div class="col-md-12">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma1" value="IS_EMRI_HATASI" @(checkedValue == "sapma1" ? "checked" : "")>
+                        <label class="form-check-label" for="sapma1">
+                            İş Emri Hatası
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma2" value="URUN_AGACI_HATASI" @(checkedValue == "sapma2" ? "checked" : "")>
+                        <label class="form-check-label" for="sapma2">
+                            Ürün Ağacı Hatası
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma3" value="ALTERNATIF_URUN_KULLANILDI" @(checkedValue == "sapma3" ? "checked" : "")>
+                        <label class="form-check-label" for="sapma3">
+                            Alternatif Ürün Kullanıldı
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="sapmanedeni" id="sapma4" value="SAPMA_TIPI_ONAY" @(checkedValue == "sapma4" ? "checked" : "")>
+                        <label class="form-check-label" for="sapma4">
+                            Sapma Tipi-Onay
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- #endregion -->
+        <script>
+            // Input alanına girilen değere göre select kutusunun seçili öğesini güncelle
+            document.getElementById('urunSearchInput').addEventListener('input', function () {
+                var inputVal = this.value.trim(); // Input değerini al
+
+                // Select kutusunu seç
+                var selectBox = document.querySelector('select[name="urunAdi"]');
+
+                // Her seçeneği kontrol et
+                Array.from(selectBox.options).forEach(function (option) {
+                    // Seçeneğin değerini al (malzeme numarası)
+                    var optionValue = option.value.trim();
+
+                    // Girilen değer ile seçenek değeri arasında eşleşme kontrolü yap
+                    if (optionValue.startsWith(inputVal)) {
+                        option.selected = true; // Eşleşen seçeneği seçili yap
+                        return; // Döngüden çık
+                    }
+                });
+            });
+        </script>
+        <script>
+
+            $(document).ready(function () {
+                $('form').on('submit', function (e) {
+                    e.preventDefault(); // Formun normal gönderimini engelle
+
+                    var form = $(this); // Form elementini seç
+                    var adetValue = form.find('input[name="isKalemInputMikar"]').val();
+                    var sapmaNedeni = form.find('input[name="sapmanedeni"]:checked').length;
+
+                    if (!(/^\d+$/.test(adetValue)) && sapmaNedeni == 0) {
+                        alert("Adet veya alternatif ürün girdikten sonra Sapma nedeni seçiniz...");
+                        return false; // Form gönderimini engelle
+                    } else if (!(/^\d+$/.test(adetValue))) {
+                        alert("Adet veya alternatif ürün girdikten sonra Sapma nedeni giriniz...");
+                        return false; // Form gönderimini engelle
+                    } else if (sapmaNedeni == 0) {
+                        alert("Sapma nedeni seçiniz...");
+                        return false; // Form gönderimini engelle
+                    } else {
+                        form.off('submit'); // Form submit olayını kaldır
+                        form.submit(); // Formu gönder
+                    }
+                });
+            });
+
+        </script>
+
